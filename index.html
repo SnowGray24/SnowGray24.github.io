@@ -3,6 +3,7 @@
     <head>
         <meta charset='utf-8' />
         <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+        <link rel="stylesheet" href="./css/modal.css" />
     
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
@@ -113,68 +114,6 @@
                 cursor: pointer;
                 margin-top: 2em;
             }
-
-
-            #modal-new-event{
-                top: 0;
-                position: absolute;
-                height: 100%;
-                width: 100%;
-                background-color: rgba(0, 0, 0, 0.671);
-                overflow: hidden;
-
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-
-            .container-modal{
-                height: 300px;
-                width: 500px;
-                background-color: white;
-                border-radius: .5em;
-                padding: 1em 5em;
-            }
-
-            .body-modal form .content-input{
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                margin-top: 1em;
-            }
-            .body-modal form .content-input:first-child{
-                margin-top: 0;
-            }
-            .body-modal form div button{
-                background-color: green;
-                color: white;
-                border: none;
-                padding: 1em .5em;
-                border-radius: 10px;
-                font-weight: bold;
-                cursor: pointer;
-            }
-            .heading-modal{
-                display: flex;
-                justify-content: end;
-                height: 80px;
-            }
-            .heading-modal button{
-                color: white;
-                background-color: red;
-                border: none;
-                border-radius: 2px;
-                height: 20px;
-                cursor: pointer;
-            }
-            .colorEvent{
-                background-color: red;
-                height: 10px;
-                width: 10px;
-                margin-top: 0;
-            }
-
-            
         </style>
     </head>
     <body>
@@ -237,10 +176,32 @@
 
                         <div class="content-input">
                             <label>Cor</label>
-                            <span>
-                                <input type="radio" id="colorEvent" name="colorEvent"></input>
-                                <div class="colorEvent"></div>
-                            </span>
+                            <div class="list-option">
+                                <div class="option-modal-input">
+                                    <input value="red" type="radio" name="colorEvent"></input>
+                                    <div class="boxColorEvent colorEvent-red"></div>
+                                </div>
+
+                                <div class="option-modal-input">
+                                    <input value="yellow" type="radio" name="colorEvent"></input>
+                                    <div class="boxColorEvent colorEvent-yellow"></div>
+                                </div>
+
+                                <div class="option-modal-input">
+                                    <input value="green" type="radio" name="colorEvent"></input>
+                                    <div class="boxColorEvent colorEvent-green"></div>
+                                </div>
+
+                                <div class="option-modal-input">
+                                    <input value="blue" type="radio" name="colorEvent"></input>
+                                    <div class="boxColorEvent colorEvent-blue"></div>
+                                </div>
+
+                                <div class="option-modal-input">
+                                    <input value="rgb(255, 0, 221)" type="radio" name="colorEvent"></input>
+                                    <div class="boxColorEvent colorEvent-pink"></div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="content-input">
@@ -256,215 +217,6 @@
             </div>
         </div>
 
-        <script>
-
-            const eventos = [
-                {
-                    nome: "O mundo",
-                    dia: 17,
-                    mes: 3,
-                    ano: 2022,
-                    color: 'red',
-                },
-                {
-                    nome: "Show de Bola",
-                    dia: 14,
-                    mes: 3,
-                    ano: 2022,
-                    color: 'blue',
-                },
-                {
-                    nome: 'teste',
-                    dia: 5,
-                    mes: 4,
-                    ano: 2022,
-                    color: 'pink',
-                },
-                {
-                    nome: "O mundo",
-                    dia: 30,
-                    mes: 4,
-                    ano: 2022,
-                    color: 'red',
-                },
-            ]
-
-
-
-            const loadingDate = (year, month, day, limitDay, today) =>{
-                let date2 = new Date(year, month, 1);
-
-                let dados=``;
-                let sub = 0;
-                let aux = 0;
-                for(let i = 1; i <= 6; i++){
-                    dados+=`<tr>`;
-                    for(let j = 1; j <= 7; j++){
-
-                        if(i===1){
-                            if(j-1 >= date2.getDay()){
-                                dados+=`<td id='${j+aux-sub}-${month+1}-${year}' class='day'>${(j+aux-sub < 10)?'0':''}${j+aux-sub}</td>`             
-                            }else{
-                                dados+=`<td></td>`;
-                                sub++;
-                            }
-                        }else{
-                            if(j+aux-sub <= limitDay){ 
-                                dados+=`<td id='${j+aux-sub}-${month+1}-${year}' class='day' >${(j+aux-sub < 10)?'0':''}${j+aux-sub}</td>`;  
-                            }else{
-                                dados+=`<td></td>`;
-                            }
-                        }
-                    }
-                    dados+=`</tr>`
-                    aux+=7;
-                }
-
-
-                const TableCalendar = document.querySelector('#calendar tbody');
-                TableCalendar.innerHTML = dados;
-
-                let dayToday = document.getElementById(today);
-                if(dayToday != null){
-                    dayToday.classList.add('dayToday');
-                } 
-            }
-
-            const limitMonth = (year, month) =>{
-                if(month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11){
-                    return(31);
-                }else if (month == 3 || month == 5 || month == 8 || month == 10){
-                    return(30);
-                }else{
-                    if(year % 4 === 0){
-                        return(29);
-                    }else{
-                        return(28);
-                    }
-                }
-            }
-
-            const nameMonth = (month) =>{
-                if(month === 0){
-                    return('Janeiro');
-                }else if(month === 1){
-                    return('Fevereiro');
-                }else if(month === 2){
-                    return('Março');
-                }else if(month === 3){
-                    return('Abril');
-                }else if(month === 4){
-                    return('Maio');
-                }else if(month === 5){
-                    return('Junho');
-                }else if(month === 6){
-                    return('Julho');
-                }else if(month === 7){
-                    return('Agosto');
-                }else if(month === 8){
-                    return('Setembro');
-                }else if(month === 9){
-                    return('Outubro');
-                }else if(month === 10){
-                    return('Novembro');
-                }else if(month === 11){
-                    return('Dezembro');
-                }else{
-                    return('Mês não encontrado');
-                }
-            }
-
-            const makerEvent = (eventos, month) =>{
-                let containerEvent = ``;
-                
-                for(i=0; i<eventos.length; i++){
-                    let id = `${eventos[i].dia}-${eventos[i].mes}-${eventos[i].ano}`;
-
-                    let idSelect = document.getElementById(id);
-                    if (idSelect != undefined){  
-                        idSelect.style.backgroundColor = eventos[i].color;
-
-                        containerEvent += `
-                            <div style="width: 100%; height: 30px; display: grid; grid-template-columns: 1fr 3fr; margin-top: .5em;">
-                                <div style="background-color: ${eventos[i].color}; display: flex; align-items: center; justify-content: center; color: white;">${eventos[i].dia}</div>
-                                <div style="text-align: center;">${eventos[i].nome}</div>
-                            </div>
-                        `
-                    }
-                }
-                document.querySelector('#myEvents').innerHTML = containerEvent;
-            }
-
-            let date = new Date();
-            let day = date.getDate();
-            let year = date.getFullYear();
-            let month = date.getMonth();
-
-            const today = `${day}-${month+1}-${year}`;
-
-            loadingDate(year, month, day, limitMonth(year, month), today);
-
-            const NameMonth = document.querySelector('#month-Calendar');
-            NameMonth.innerHTML = nameMonth(month);
-
-            makerEvent(eventos, month);
-
-
-            //Evento de Clique >
-
-            
-
-            const next = () =>{
-                month++;
-                if(month > 11){
-                    month = 0;
-                }
-                loadingDate(year, month, day, limitMonth(year, month), today);
-                NameMonth.innerHTML = nameMonth(month);
-                makerEvent(eventos, month);
-
-
-            }
-
-            const later = () =>{
-                month--;
-                if(month < 0){
-                    month = 11;
-                }
-                loadingDate(year, month, day, limitMonth(year, month), today);
-                NameMonth.innerHTML = nameMonth(month);
-                makerEvent(eventos, month);
-
-
-            }
-
-
-
-
-            const btn = document.querySelector("#submit");
-            document.getElementById('modal-new-event').style.display = 'none';
-            btn.addEventListener("click", function(e) {
-                
-                e.preventDefault();
-
-                
-            });
-
-            const btnNewEvent = document.querySelector("#btnNewEvent");
-            btnNewEvent.addEventListener("click", ()=>{
-                document.getElementById('modal-new-event').style.display = 'flex';
-            })
-
-            const btnClosedModal = document.querySelector("#closed-modal");
-            btnClosedModal.addEventListener("click", ()=>{
-                document.getElementById('modal-new-event').style.display = 'none';
-            })
-
-            
-
-            //let date = new Date (year, month);
-
-            //console.log(date.getMonth()+1);
-        </script>
+        <script src="js/calendar.js"></script>
     </body>
 </html>
