@@ -5,15 +5,31 @@
         <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
     
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+            html, body{
+                padding: 0;
+                margin: 0;
+            }
+
             td{
                 padding: .5em 1em;
                 text-align: center;
+                font-size: 16px
+            }
+            @media(max-width: 500px){
+                td{
+                    padding: .3em .7em;
+                    font-size: 12px;
+                }
             }
 
             #infosCalendar{
-                display: grid;
-                grid-template-columns: 1fr 3fr 1fr;
+                display: flex;
+                gap: 0 60px;
                 text-align: center;
+                align-items: center;
+                justify-content: center;
                 width: 100%;
             }
 
@@ -46,43 +62,197 @@
 
 
             .container{
+                display: flex;
+                padding: 1em;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .content-calendar{
                 max-width: 360px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
             }
+
+            #month-Calendar{
+                width: 100px;
+            }
+
+            #infosCalendar p{
+                font-family: 'Lobster', cursive;
+                font-size: 1.5rem;
+            }
+
+            #infosCalendar button{
+                height: 30px;
+                width: 30px;
+                background-color:rgb(75, 130, 192);
+                color: white;
+                border: none;
+                cursor: pointer;
+                border-radius: 10px;
+                font-weight: bold;
+                transition: .5s;
+            }
+
+            #infosCalendar button:hover,
+            #infosCalendar button::selection{
+                background-color:rgb(0, 60, 129);
+            }
+
+
+
+            #button-new-event button{
+                background-color: green;
+                color: white;
+                border: none;
+                padding: .5em 1em;
+                border-radius: 1em;
+                cursor: pointer;
+                margin-top: 2em;
+            }
+
+
+            #modal-new-event{
+                top: 0;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.671);
+                overflow: hidden;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+
+            .container-modal{
+                height: 300px;
+                width: 500px;
+                background-color: white;
+                border-radius: .5em;
+                padding: 1em 5em;
+            }
+
+            .body-modal form .content-input{
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                margin-top: 1em;
+            }
+            .body-modal form .content-input:first-child{
+                margin-top: 0;
+            }
+            .body-modal form div button{
+                background-color: green;
+                color: white;
+                border: none;
+                padding: 1em .5em;
+                border-radius: 10px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            .heading-modal{
+                display: flex;
+                justify-content: end;
+                height: 80px;
+            }
+            .heading-modal button{
+                color: white;
+                background-color: red;
+                border: none;
+                border-radius: 2px;
+                height: 20px;
+                cursor: pointer;
+            }
+            .colorEvent{
+                background-color: red;
+                height: 10px;
+                width: 10px;
+                margin-top: 0;
+            }
+
+            
         </style>
     </head>
     <body>
 
 
         <div class="container">
-            <div id="infosCalendar">
-                <button onclick="down();"><</button>
-                <p id="month-Calendar"></p>
-                <button onclick="next();">></button>
+
+            <div class="content-calendar">
+                <div id="infosCalendar">
+                    <button onclick="later();"><</button>
+                    <p id="month-Calendar"></p>
+                    <button onclick="next();">></button>
+                </div>
+
+                <table id="calendar">
+                    <thead>
+                        <tr>
+                            <th>dom</th>
+                            <th>seg</th>
+                            <th>ter</th>
+                            <th>qua</th>
+                            <th>qui</th>
+                            <th>sex</th>
+                            <th>sab</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                </table>
+                
+                <div style="width: 100%;" id="myEvents">
+
+                </div>
+
+                <div id="button-new-event">
+                    <button id="btnNewEvent">Cadastrar novo evento</button>
+                </div>
             </div>
+        </div>
 
-            <table id="calendar">
-                <thead>
-                    <tr>
-                        <th>dom</th>
-                        <th>seg</th>
-                        <th>ter</th>
-                        <th>qua</th>
-                        <th>qui</th>
-                        <th>sex</th>
-                        <th>sab</th>
-                    </tr>
-                </thead>
 
-                <tbody>
+        <div id="modal-new-event">
+            <div class="container-modal">
+                <div class="heading-modal">
+                    <button id="closed-modal">X</button>
+                </div>
+                <div class="body-modal">
+                    <form>
+                        <div class="content-input">
+                            <label>Nome do Evento</label>
+                            <input id="nameEvent" name="nameEvent" type="text" /> 
+                        </div>
 
-                </tbody>
-            </table>
+                        <div class="content-input">
+                            <label>Descrição do Evento</label>
+                            <input id="descriptionEvent" name="descriptionEvent" type="text" />
+                        </div>
 
-            <div style="width: 100%;" id="myEvents">
+                        <div class="content-input">
+                            <label>Cor</label>
+                            <span>
+                                <input type="radio" id="colorEvent" name="colorEvent"></input>
+                                <div class="colorEvent"></div>
+                            </span>
+                        </div>
 
+                        <div class="content-input">
+                            <label>Data do Evento</label>
+                            <input id="dateEvent" name="dateEvent" type="date" />
+                        </div>
+
+                        <div >
+                            <button id="submit">Cadastrar Evento</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -241,6 +411,9 @@
 
 
             //Evento de Clique >
+
+            
+
             const next = () =>{
                 month++;
                 if(month > 11){
@@ -253,7 +426,7 @@
 
             }
 
-            const down = () =>{
+            const later = () =>{
                 month--;
                 if(month < 0){
                     month = 11;
@@ -264,6 +437,28 @@
 
 
             }
+
+
+
+
+            const btn = document.querySelector("#submit");
+            document.getElementById('modal-new-event').style.display = 'none';
+            btn.addEventListener("click", function(e) {
+                
+                e.preventDefault();
+
+                
+            });
+
+            const btnNewEvent = document.querySelector("#btnNewEvent");
+            btnNewEvent.addEventListener("click", ()=>{
+                document.getElementById('modal-new-event').style.display = 'flex';
+            })
+
+            const btnClosedModal = document.querySelector("#closed-modal");
+            btnClosedModal.addEventListener("click", ()=>{
+                document.getElementById('modal-new-event').style.display = 'none';
+            })
 
             
 
