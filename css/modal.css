@@ -94,12 +94,16 @@ input, form{
 }
 
 @media(max-width: 600px){
+    #modal-new-event{
+        height: 100vh;
+        width: 100vw;
+    }
     .heading-modal{
         height: 60px;
     }
     .container-modal{
-        height: 100vh;
-        width: 100vw;
+        height: 100%;
+        width: 100%;
         padding: .2em 3em;
     }
     .heading-modal button{
