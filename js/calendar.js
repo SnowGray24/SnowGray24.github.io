@@ -1,32 +1,25 @@
 const eventos = [
     {
         nome: "O mundo",
-        dia: 17,
-        mes: 3,
-        ano: 2022,
+        dia: '17',
+        mes: '03',
+        ano: '2022',
         color: 'red',
     },
     {
         nome: "Show de Bola",
-        dia: 14,
-        mes: 3,
-        ano: 2022,
+        dia: '14',
+        mes: '03',
+        ano: '2022',
         color: 'blue',
     },
     {
         nome: 'teste',
-        dia: 5,
-        mes: 4,
-        ano: 2022,
+        dia: '05',
+        mes: '04',
+        ano: '2022',
         color: 'pink',
-    },
-    {
-        nome: "O mundo",
-        dia: 30,
-        mes: 4,
-        ano: 2022,
-        color: 'red',
-    },
+    }
 ]
 
 
@@ -43,14 +36,16 @@ const loadingDate = (year, month, day, limitDay, today) =>{
 
             if(i===1){
                 if(j-1 >= date2.getDay()){
-                    dados+=`<td id='${j+aux-sub}-${month+1}-${year}' class='day'>${(j+aux-sub < 10)?'0':''}${j+aux-sub}</td>`             
+                    textAux = '';
+                    textAux2 = '';
+                    dados+=`<td id='${(j+aux-sub < 10)?textAux.concat('0',j+aux-sub):j+aux-sub}-${(month+1 < 10)?textAux2.concat('0',month+1):month+1}-${year}' class='day'>${(j+aux-sub < 10)?'0':''}${j+aux-sub}</td>`             
                 }else{
                     dados+=`<td></td>`;
                     sub++;
                 }
             }else{
                 if(j+aux-sub <= limitDay){ 
-                    dados+=`<td id='${j+aux-sub}-${month+1}-${year}' class='day' >${(j+aux-sub < 10)?'0':''}${j+aux-sub}</td>`;  
+                    dados+=`<td id='${(j+aux-sub < 10)?textAux.concat('0',j+aux-sub):j+aux-sub}-${(month+1 < 10)?textAux2.concat('0',month+1):month+1}-${year}' class='day'>${(j+aux-sub < 10)?'0':''}${j+aux-sub}</td>`   
                 }else{
                     dados+=`<td></td>`;
                 }
@@ -139,8 +134,10 @@ let date = new Date();
 let day = date.getDate();
 let year = date.getFullYear();
 let month = date.getMonth();
+let dayTextAux = '';
+let monthTextAux = '';
 
-const today = `${day}-${month+1}-${year}`;
+const today = `${(day < 10)?dayTextAux.concat('0',day):day}-${(month+1<10)?monthTextAux.concat('0',month+1):month+1}-${year}`;
 
 loadingDate(year, month, day, limitMonth(year, month), today);
 
@@ -187,6 +184,41 @@ btn.addEventListener("click", function(e) {
     
     e.preventDefault();
 
+    let newInfo = {
+        nome: '',
+        dia: 0,
+        mes: 0,
+        ano: 0,
+        color: '',
+
+    }
+
+    const name = document.getElementsByName('nameEvent')[0].value;
+
+    const description = document.getElementsByName('descriptionEvent').value;
+
+    const radio = document.getElementsByName('colorEvent');
+    radio.forEach((nome)=>{
+        if(nome.checked === true){
+            newInfo.color = nome.value;
+        }
+    });
+
+    const dateEvent = document.getElementsByName('dateEvent')[0].value;
+    let splitDate = dateEvent.split('-')
+
+    newInfo.nome = name;
+    newInfo.dia = splitDate[2];
+    newInfo.mes = splitDate[1];
+    newInfo.ano = splitDate[0];
+
+    eventos.push(newInfo);
+
+    makerEvent(eventos, month);
+
+    closedModal();
+    
+
     
 });
 
@@ -199,7 +231,11 @@ btnNewEvent.addEventListener("click", ()=>{
 })
 
 const btnClosedModal = document.querySelector("#closed-modal");
-btnClosedModal.addEventListener("click", ()=>{
+btnClosedModal.addEventListener("click", ()=>{closedModal()});
+
+const closedModal = () =>{
+    
+    resedformModal();
     const modal = document.getElementById('modal-new-event');
     modal.classList.remove('open-modal');
     modal.classList.add('closed-modal');
@@ -207,7 +243,23 @@ btnClosedModal.addEventListener("click", ()=>{
     setTimeout(()=>{
         modal.style.display = 'none';
     },400);
-})
+    
+}
+
+const resedformModal = () =>{
+    document.getElementsByName('nameEvent')[0].value = '';
+
+    const description = document.getElementsByName('descriptionEvent').value;
+
+    const radio = document.getElementsByName('colorEvent');
+    radio.forEach((nome)=>{
+        if(nome.checked === true){
+            nome.checked = false;
+        }
+    });
+    
+    document.getElementsByName('dateEvent')[0].value = '';
+}
 
 
 
